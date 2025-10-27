@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>👑 5 min Dealzone</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      overflow-x: hidden;
+      background-color: #e3f2fd;
+      transition: background 0.3s ease-in-out;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 20px;
+      background: white;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .menu-btn {
+      font-size: 26px;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: 600;
+      color: goldenrod;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .search-btn {
+      background: white;
+      border: none;
+      border-radius: 10px;
+      padding: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    /* Search bar */
+    .search-bar {
+      display: none;
+      width: 100%;
+      padding: 12px 20px;
+      background-color: #f8f9fa;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Side Menu */
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: -270px;
+      width: 270px;
+      height: 100%;
+      background: white;
+      transition: left 0.3s ease-in-out;
+      z-index: 2000;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+      padding: 30px 20px;
+      overflow-y: auto;
+    }
+
+    .side-menu.active {
+      left: 0;
+    }
+
+    .side-menu h1 {
+      font-size: 24px;
+      color: black;
+      margin-bottom: 25px;
+    }
+
+    .side-menu h2 {
+      margin: 18px 0;
+      font-size: 22px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, color 0.3s ease;
+    }
+
+    .side-menu h2:hover {
+      transform: translateX(5px);
+    }
+
+    /* Colors for each section */
+    .side-menu h2[data-section="crazy"] { color: #ff5733; }
+    .side-menu h2[data-section="fashion"] { color: #ff9800; }
+    .side-menu h2[data-section="mobile"] { color: #2196f3; }
+    .side-menu h2[data-section="electronics"] { color: #9c27b0; }
+    .side-menu h2[data-section="home"] { color: #4caf50; }
+    .side-menu h2[data-section="toys"] { color: #e91e63; }
+
+    .side-menu h2.active {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .close-btn {
+      font-size: 24px;
+      cursor: pointer;
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: black;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(rgba(0, 123, 255, 0.6), rgba(0, 123, 255, 0.6)), 
+        url('https://cdn.pixabay.com/photo/2016/11/21/16/02/woman-1848949_1280.jpg') center/cover no-repeat;
+      height: 90vh;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 8%;
+      position: relative;
+      transition: background 0.3s ease-in-out;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: #f0f0f0;
+    }
+
+    /* Section content below hero */
+    .section {
+      display: none;
+      padding: 60px 10%;
+      background: white;
+      min-height: 60vh;
+      text-align: center;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .section h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .section p {
+      font-size: 1.1rem;
+      color: #444;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+      .side-menu {
+        width: 230px;
+      }
+      .side-menu h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Side Menu -->
+  <div class="side-menu" id="sideMenu">
+    <button class="close-btn" onclick="toggleMenu()">✖</button>
+    <h1>Categories</h1>
+    <h2 data-section="crazy">🔥 Crazy Deals</h2>
+    <h2 data-section="fashion">👕 Fashion 👗</h2>
+    <h2 data-section="mobile">📱 Mobile</h2>
+    <h2 data-section="electronics">💻 Electronics</h2>
+    <h2 data-section="home">🏠 Home</h2>
+    <h2 data-section="toys">🧸 Toys</h2>
+  </div>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <div class="title">👑 5 min Dealzone</div>
+    <button class="search-btn" onclick="toggleSearch()">🔍</button>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-bar" id="searchBar">
+    <input type="text" placeholder="Search for deals...">
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero" id="heroSection">
+    <div class="hero-content">
+      <h1>Limited Deals</h1>
+      <p>Grab them before they're gone!</p>
+    </div>
+  </section>
+
+  <!-- Content Sections -->
+  <section class="section" id="crazy">
+    <h1>🔥 Crazy Deals</h1>
+    <p>Unbelievable discounts you can’t miss!</p>
+  </section>
+
+  <section class="section" id="fashion">
+    <h1>👕 Fashion 👗</h1>
+    <p>Trendy styles for every occasion!</p>
+  </section>
+
+  <section class="section" id="mobile">
+    <h1>📱 Mobile</h1>
+    <p>Latest smartphones with special offers!</p>
+  </section>
+
+  <section class="section" id="electronics">
+    <h1>💻 Electronics</h1>
+    <p>Top gadgets and accessories for tech lovers!</p>
+  </section>
+
+  <section class="section" id="home">
+    <h1>🏠 Home</h1>
+    <p>Everything you need for a perfect home setup!</p>
+  </section>
+
+  <section class="section" id="toys">
+    <h1>🧸 Toys</h1>
+    <p>Fun toys and games for kids and adults alike!</p>
+  </section>
+
+  <script>
+    function toggleSearch() {
+      const searchBar = document.getElementById('searchBar');
+      searchBar.style.display = searchBar.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById('sideMenu');
+      const body = document.body;
+      menu.classList.toggle('active');
+      body.style.background = menu.classList.contains('active') ? 'white' : '#e3f2fd';
+    }
+
+    // Open section on click
+    document.querySelectorAll('.side-menu h2').forEach(item => {
+      item.addEventListener('click', () => {
+        const sectionId = item.getAttribute('data-section');
+
+        document.querySelectorAll('.side-menu h2').forEach(el => el.classList.remove('active'));
+        item.classList.add('active');
+
+        document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+
+        // Close menu on mobile after selecting
+        document.getElementById('sideMenu').classList.remove('active');
+        document.body.style.background = '#e3f2fd';
+
+        // Scroll to the section smoothly
+        document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+
+</body>
+</html>
